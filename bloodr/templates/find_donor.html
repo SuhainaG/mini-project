@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Find Donor{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Search Form -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="mb-0">Find Donor</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('find_donor') }}">
+                        <div class="form-group mb-3">
+                            <label>Donor Type</label>
+                            <select class="form-control" name="donor_type" id="donor_type" required>
+                                <option value="">Select Type</option>
+                                <option value="blood">Blood Donor</option>
+                                <option value="organ">Organ Donor</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3" id="blood_group_section" style="display: none;">
+                            <label>Blood Group</label>
+                            <select class="form-control" name="blood_group">
+                                <option value="">Any Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3" id="organ_type_section" style="display: none;">
+                            <label>Organ Type</label>
+                            <select class="form-control" name="organ_type">
+                                <option value="">Any Organ</option>
+                                <option value="kidney">Kidney</option>
+                                <option value="liver">Liver</option>
+                                <option value="heart">Heart</option>
+                                <option value="corneas">Corneas</option>
+                                <option value="lungs">Lungs</option>
+                                <option value="pancreas">Pancreas</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>City</label>
+                            <select class="form-control" name="city">
+                                <option value="">Any City</option>
+                                {% for city in cities %}
+                                    <option value="{{ city }}">{{ city|title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Search Donors</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Recommended Donors</h3>
+                </div>
+                <div class="card-body">
+                    {% if searched %}
+                        {% if recommendations %}
+                            <div class="row">
+                                {% for donor in recommendations %}
+                                    <div class="col-md-6 mb-4">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h5 class="card-title mb-0">{{ donor.username }}</h5>
+                                                    <span class="badge bg-success">Match Score: {{ donor.match_score }}</span>
+                                                </div>
+                                                <p class="card-text">
+                                                    <strong>Location:</strong> {{ donor.city.title() }}<br>
+                                                    <strong>Contact:</strong> {{ donor.phone }}<br>
+                                                    {% if donor.blood_donor == 'yes' %}
+                                                        <strong>Blood Group:</strong> {{ donor.blood_group }}<br>
+                                                    {% endif %}
+                                                    {% if donor.organ_donor == 'yes' %}
+                                                        <strong>Organ Type:</strong> {{ donor.organ_group }}<br>
+                                                    {% endif %}
+                                                </p>
+                                                <button class="btn btn-primary btn-sm contact-donor"
+                                                        data-donor-id="{{ donor._id }}"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#contactModal">
+                                                    Contact Donor
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                No donors found matching your criteria. Try broadening your search.
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            Use the search form to find donors.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Donor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="sendContactMessage">Send Message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const donorType = document.getElementById('donor_type');
+    const bloodGroupSection = document.getElementById('blood_group_section');
+    const organTypeSection = document.getElementById('organ_type_section');
+
+    donorType.addEventListener('change', function() {
+        if (this.value === 'blood') {
+            bloodGroupSection.style.display = 'block';
+            organTypeSection.style.display = 'none';
+        } else if (this.value === 'organ') {
+            bloodGroupSection.style.display = 'none';
+            organTypeSection.style.display = 'block';
+        } else {
+            bloodGroupSection.style.display = 'none';
+            organTypeSection.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Register</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('register') }}">
+                        <div class="form-group mb-3">
+                            <input type="text" class="form-control" name="username" placeholder="Username" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="email" class="form-control" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="text" class="form-control" name="phone" placeholder="Phone Number" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <textarea class="form-control" name="address" placeholder="Address" required></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="text" class="form-control" name="city" placeholder="City" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        </div>
+                        
+                        <!-- Blood Donor Section -->
+                        <div class="form-group mb-3">
+                            <label>Are you willing to be a blood donor?</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="blood_donor" value="yes" id="blood_yes">
+                                <label class="form-check-label" for="blood_yes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="blood_donor" value="no" id="blood_no" checked>
+                                <label class="form-check-label" for="blood_no">No</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3" id="blood_group_section" style="display: none;">
+                            <label>Select Blood Group:</label>
+                            <select class="form-control" name="blood_group">
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+
+                        <!-- Organ Donor Section -->
+                        <div class="form-group mb-3">
+                            <label>Are you willing to be an organ donor?</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="organ_donor" value="yes" id="organ_yes">
+                                <label class="form-check-label" for="organ_yes">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="organ_donor" value="no" id="organ_no" checked>
+                                <label class="form-check-label" for="organ_no">No</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3" id="organ_group_section" style="display: none;">
+                            <label>Select Organs for Donation:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="organ_group" value="kidney" id="kidney">
+                                <label class="form-check-label" for="kidney">Kidney</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="organ_group" value="liver" id="liver">
+                                <label class="form-check-label" for="liver">Liver</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="organ_group" value="heart" id="heart">
+                                <label class="form-check-label" for="heart">Heart</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="organ_group" value="corneas" id="corneas">
+                                <label class="form-check-label" for="corneas">Corneas</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Blood donor section toggle
+    const bloodDonorRadios = document.querySelectorAll('input[name="blood_donor"]');
+    const bloodGroupSection = document.getElementById('blood_group_section');
+    
+    bloodDonorRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            bloodGroupSection.style.display = this.value === 'yes' ? 'block' : 'none';
+        });
+    });
+
+    // Organ donor section toggle
+    const organDonorRadios = document.querySelectorAll('input[name="organ_donor"]');
+    const organGroupSection = document.getElementById('organ_group_section');
+    
+    organDonorRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            organGroupSection.style.display = this.value === 'yes' ? 'block' : 'none';
+        });
+    });
+});
+</script>
+{% endblock %}

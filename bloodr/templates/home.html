@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Welcome to Bloodr{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center">
+            <h1 class="display-4 mb-4">Blood and Organ Donation Management system </h1>
+            <p class="lead mb-4">A platform connecting blood and organ donors with those in need</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title text-danger"><i class="fas fa-tint"></i> Blood Donation</h3>
+                    <p class="card-text">Join our community of blood donors and help save lives. Your blood donation can make a significant difference in someone's life.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Quick and easy registration</li>
+                        <li><i class="fas fa-check text-success"></i> Find donors in your city</li>
+                        <li><i class="fas fa-check text-success"></i> Regular donation updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title text-success"><i class="fas fa-heart"></i> Organ Donation</h3>
+                    <p class="card-text">Register as an organ donor and give the gift of life. Your decision to become an organ donor can transform multiple lives.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Simple registration process</li>
+                        <li><i class="fas fa-check text-success"></i> Connect with recipients</li>
+                        <li><i class="fas fa-check text-success"></i> Make a lasting impact</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2 text-center">
+            {% if not session.username %}
+            <div class="mb-4">
+                <a href="{{ url_for('register') }}" class="btn btn-danger btn-lg mx-2">Register Now</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-danger btn-lg mx-2">Login</a>
+            </div>
+            {% else %}
+            <div class="mb-4">
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-info btn-lg mx-2">
+                    <i class="fas fa-cog me-2"></i>Go to Admin Dashboard
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="text-center">
+                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                <h4>Join Our Community</h4>
+                <p>Connect with donors and recipients in your area</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                <h4>Easy Search</h4>
+                <p>Find donors quickly based on blood type and location</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="text-center">
+                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                <h4>Secure Platform</h4>
+                <p>Your information is protected with the highest security standards</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

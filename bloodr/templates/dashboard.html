@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">Welcome, {{ username }}!</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Thank you for being part of our life-saving community.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Donor Status Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3 class="mb-0">Your Donor Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4>Blood Donation</h4>
+                        {% if user.blood_donor == 'yes' %}
+                            <p class="text-success">
+                                <i class="fas fa-check-circle"></i> 
+                                Registered Blood Donor ({{ user.blood_group }})
+                            </p>
+                        {% else %}
+                            <p class="text-muted">
+                                <i class="fas fa-times-circle"></i>
+                                Not registered as blood donor
+                            </p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <h4>Organ Donation</h4>
+                        {% if user.organ_donor == 'yes' %}
+                            <p class="text-success">
+                                <i class="fas fa-check-circle"></i>
+                                Registered Organ Donor
+                            </p>
+                            {% if user.organ_group %}
+                            <p>Registered organs: {{ user.organ_group|join(', ') }}</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="text-muted">
+                                <i class="fas fa-times-circle"></i>
+                                Not registered as organ donor
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3 class="mb-0">Quick Actions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{{ url_for('find_donor') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-search"></i> Find Donors
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-calendar-alt"></i> View Donation History
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-user-edit"></i> Update Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Row -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Community Impact</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <h4 class="text-primary">{{ stats.total_donors }}</h4>
+                            <p class="text-muted">Total Donors</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h4 class="text-primary">{{ stats.blood_donors }}</h4>
+                            <p class="text-muted">Blood Donors</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h4 class="text-primary">{{ stats.organ_donors }}</h4>
+                            <p class="text-muted">Organ Donors</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
